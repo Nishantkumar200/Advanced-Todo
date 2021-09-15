@@ -82,7 +82,7 @@ export const createNewItem =
 // Function to edit the item
 
 export const editTodoItem =
-  (itemId,userId, newTitle, newDetail, newDuedate) => async (dispatch) => {
+  (itemId,userId, newTitle, newDetail) => async (dispatch) => {
     console.log(itemId,userId, newTitle, newDetail);
 
     dispatch({

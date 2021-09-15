@@ -1,4 +1,6 @@
 export const todoReducer = (todo = [], action) => {
+
+  console.log(action.type)
   switch (action.type) {
     case "TODO_ITEM_REQUEST":
       return {

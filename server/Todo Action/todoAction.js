@@ -49,16 +49,16 @@ export const createTodoItem = async (req, res) => {
 export const editTodoItem = async (req, res) => {
   
   const { itemId, userId } = req.params;
-  const { title, detail, dueDate } = req.body;
+  const { newTitle, newDetail } = req.body;
 
   try {
-    const updateItem = await UserModel.findOneAndUpdate(
+    const updateItem = await UserModel.updateOne(
       { _id: userId, "todos._id": itemId },
       {
         $set: {
-          "todos.$.title": title,
-          "todos.$.detail": detail,
-          "todos.$.dueDate": dueDate,
+          "todos.$.title": newTitle,
+          "todos.$.detail": newDetail,
+          
         },
       }
     );

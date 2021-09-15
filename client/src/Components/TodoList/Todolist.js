@@ -36,10 +36,10 @@ function Todolist() {
   };
 
   const handleEditItem = (itemId) => {
-    const newTitle = prompt("New Title");
-    const newDetail = prompt("Description");
-    console.log("New Data",newTitle,newDetail);
+    let newTitle = prompt("New Title");
+    let newDetail = prompt("New Detail");
     dispatch(editTodoItem(itemId, todo?._id, newTitle, newDetail));
+    
   };
 
   const handleLogOut = () => {
@@ -59,6 +59,7 @@ function Todolist() {
   return (
     <>
       <div>My name is {todo?.name}</div>
+      <br />
       <input
         placeholder="Title"
         type="text"
