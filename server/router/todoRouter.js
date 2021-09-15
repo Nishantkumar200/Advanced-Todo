@@ -10,7 +10,7 @@ import {
 const todoRouter = express.Router();
 
 // route for getting all todo items
-todoRouter.get("/getAllItems", expressAsynHandler(getAllTodoItems));
+todoRouter.post("/getAllItems", expressAsynHandler(getAllTodoItems));
 
 // route for posting new todo Items
 todoRouter.post("/create", expressAsynHandler(createTodoItem));

@@ -6,9 +6,11 @@ import { UserModel } from "../Schema/userSchema.js";
 
 export const getAllTodoItems = async (req, res) => {
 
+  const {userId} = req.body;
+
   const getAllItems = await UserModel.findById({
-    _id: "6140a6a2a20d12bb2464594d",
-  }).select("todos");
+    _id: userId,
+  });
 
   res.json(getAllItems);
   console.log(getAllItems);
@@ -50,7 +52,7 @@ export const editTodoItem = async (req, res) => {
   const { title, detail, dueDate } = req.body;
 
   try {
-    const updateItem = await UserModel.updateOne(
+    const updateItem = await UserModel.findOneAndUpdate(
       { _id: userId, "todos._id": itemId },
       {
         $set: {

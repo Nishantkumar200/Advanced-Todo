@@ -1,7 +1,7 @@
 import axios from "axios";
 import { URL } from "../commonUrl";
 
-export const loginUser = (email, password,name) => async (dispatch) => {
+export const loginUser = (email, password,name,history) => async (dispatch) => {
   console.log(email, password,name);
 
   dispatch({
@@ -17,6 +17,9 @@ export const loginUser = (email, password,name) => async (dispatch) => {
       payload: data,
     });
 
+    localStorage.setItem('userId',JSON.stringify(data?._id));
+    history.push('/todo');
+
     console.log("User Data", data);
   } catch (error) {
     console.log(error);
@@ -26,15 +29,14 @@ export const loginUser = (email, password,name) => async (dispatch) => {
 // Function to get All items
 
 export const getAllItems = (userId) => async (dispatch) => {
-  console.log("Usr Id", userId);
-
+ 
   dispatch({
     type: "TODO_ITEM_REQUEST",
     payload: userId,
   });
 
   try {
-    const { data } = await axios.post(`${URL}/getItems`, { userId });
+    const { data } = await axios.post(`${URL}/getAllItems`, { userId });
 
     dispatch({
       type: "TODO_ITEM_SUCCESS",
@@ -81,17 +83,16 @@ export const createNewItem =
 
 export const editTodoItem =
   (itemId,userId, newTitle, newDetail, newDuedate) => async (dispatch) => {
-    console.log(itemId,userId, newTitle, newDuedate, newDetail);
+    console.log(itemId,userId, newTitle, newDetail);
 
     dispatch({
       type: "ITEM_EDIT_REQUEST",
-      payload: { userId, itemId, newTitle, newDuedate, newDetail },
+      payload: { userId, itemId, newTitle, newDetail },
     });
 
     try {
       const { data } = await axios.put(`${URL}/edit/${itemId}/${userId}`, {
         newTitle,
-        newDuedate,
         newDetail,
       });
 

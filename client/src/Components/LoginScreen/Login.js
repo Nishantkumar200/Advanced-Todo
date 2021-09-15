@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import GoogleLogin from "react-google-login";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -9,23 +9,27 @@ function Login() {
   // const [password, setPassword] = useState();
   // const [name, setName] = useState();
   const dispatch = useDispatch();
+  const history = useHistory();
+  const userId = JSON.parse(localStorage.getItem("userId"));
 
   const userData = useSelector((state) => state.login);
 
-  const history = useHistory();
   const responseGoogle = (response) => {
-    console.log(response);
+    // console.log(response);
 
     const { email, name, googleId } = response.profileObj;
 
-    dispatch(loginUser(email, googleId, name));
+    dispatch(loginUser(email, googleId, name,history));
+    history.push("/todo");
+  };
 
-    if (userData) {
+  useEffect(() => {
+    if (userId) {
       history.push("/todo");
     } else {
       history.push("/");
     }
-  };
+  }, []);
 
   console.log(userData);
   return (

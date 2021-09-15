@@ -6,39 +6,59 @@ import {
   editTodoItem,
   getAllItems,
 } from "../../Actions/UserAction";
+
+import { useHistory } from "react-router-dom";
 import moment from "moment";
 
 function Todolist() {
   const { fetchedData } = useSelector((state) => state.login);
+  const { todo } = useSelector((state) => state.todo);
+  const userId = JSON.parse(localStorage.getItem("userId"));
+  const history = useHistory();
+
+  console.log("I am todo", todo);
 
   const [title, setTitle] = useState();
   const [detail, setDetail] = useState();
   const [date, setDate] = useState();
   const dispatch = useDispatch();
 
-  console.log(fetchedData?._id);
+  // console.log(fetchedData?._id);
 
   const handleAddItem = () => {
-    dispatch(createNewItem(fetchedData?._id, title, detail, date));
+    dispatch(createNewItem(todo?._id, title, detail, date));
+    window.location.reload();
   };
 
   const handleDeleteItem = (itemId) => {
-    dispatch(deleteTodoItem(itemId, fetchedData?._id));
+    dispatch(deleteTodoItem(itemId, todo?._id));
+    window.location.reload();
   };
 
   const handleEditItem = (itemId) => {
     const newTitle = prompt("New Title");
-    const newDuedate = prompt("New Title");
-    const newDetail = prompt("New Title");
-
-    dispatch(
-      editTodoItem(itemId, fetchedData?._id, newTitle, newDuedate, newDetail)
-    );
+    const newDetail = prompt("Description");
+    console.log("New Data",newTitle,newDetail);
+    dispatch(editTodoItem(itemId, todo?._id, newTitle, newDetail));
   };
 
+  const handleLogOut = () => {
+    localStorage.clear();
+    history.push("/");
+  };
+
+  useEffect(() => {
+    if (userId) {
+      history.push("/todo");
+    } else {
+      history.push("/");
+    }
+
+    dispatch(getAllItems(userId));
+  }, [userId]);
   return (
     <>
-      <div>My name is {fetchedData?.name}</div>
+      <div>My name is {todo?.name}</div>
       <input
         placeholder="Title"
         type="text"
@@ -55,10 +75,11 @@ function Todolist() {
         onChange={(e) => setDate(e.target.value)}
       />
       <button onClick={handleAddItem}>Add Items</button>
+      <button onClick={handleLogOut}>Log out</button>
 
       <br />
 
-      {fetchedData?.todos?.map((items) => (
+      {todo?.todos?.map((items) => (
         <>
           <div key={items._id}>
             <h1>{items?.title}</h1>
